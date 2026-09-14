@@ -1,0 +1,25 @@
+<!--
+  pages/dashboard.html — Home screen fragment
+
+  Loaded by app.js → initDashboardPage()
+  JS targets: #summary-grid, #budget-bars, #recent-transactions
+-->
+<section class="page page--dashboard">
+  <div class="summary-grid" id="summary-grid">
+    <!-- Filled by ui/dashboard.js renderDashboardSummary() -->
+  </div>
+
+  <section class="card">
+    <h2 class="card__title">Budget progress</h2>
+    <div id="budget-bars">
+      <!-- Filled by ui/budget-bars.js renderBudgetBars() -->
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="card__title">Recent transactions</h2>
+    <ul class="list" id="recent-transactions">
+      <!-- Filled by ui/dashboard.js renderRecentTransactions() -->
+    </ul>
+  </section>
+</section>

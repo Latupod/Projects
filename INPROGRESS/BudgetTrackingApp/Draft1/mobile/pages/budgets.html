@@ -1,0 +1,17 @@
+<!--
+  pages/budgets.html — Category budget limits fragment
+
+  Loaded by app.js → initBudgetsPage() (placeholder UI — expand with edit forms)
+  Targets: #budget-list, #add-category-btn
+-->
+<section class="page page--budgets">
+  <p class="hint">Set a monthly spending limit for each category.</p>
+
+  <ul class="list" id="budget-list">
+    <!-- Filled by app.js initBudgetsPage(); use services/budgets.updateCategoryLimit() when editing -->
+  </ul>
+
+  <button class="btn btn--secondary" type="button" id="add-category-btn">
+    Add category
+  </button>
+</section>

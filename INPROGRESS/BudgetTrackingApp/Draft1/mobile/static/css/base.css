@@ -1,0 +1,76 @@
+/**
+ * base.css — Global variables, reset, typography
+ * Loaded on every page via index.html. Defines colour tokens and base element styles.
+ */
+
+:root {
+  --color-bg: #f4f6f5;
+  --color-surface: #ffffff;
+  --color-text: #1c2421;
+  --color-text-muted: #5c6b64;
+  --color-primary: #1a5f4a;
+  --color-primary-soft: #e3f1eb;
+  --color-border: #d8e0dc;
+  --color-danger: #b42318;
+  --color-income: #0f766e;
+  --color-expense: #b45309;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+h1,
+h2,
+p,
+ul {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.loading,
+.hint,
+.empty-state {
+  color: var(--color-text-muted);
+}
+
+.hint {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}

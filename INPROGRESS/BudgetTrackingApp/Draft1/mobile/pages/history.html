@@ -1,0 +1,25 @@
+<!--
+  pages/history.html — Transaction history fragment
+
+  Loaded by app.js → initHistoryPage()
+  Filters: #history-filters (month, category) → listTransactions() → #transaction-list
+-->
+<section class="page page--history">
+  <form class="filters" id="history-filters">
+    <label class="form__field">
+      <span class="form__label">Month</span>
+      <input class="form__input" type="month" name="month" id="history-month">
+    </label>
+
+    <label class="form__field">
+      <span class="form__label">Category</span>
+      <select class="form__input" name="category_id" id="history-category">
+        <option value="">All categories</option>
+      </select>
+    </label>
+  </form>
+
+  <ul class="list" id="transaction-list">
+    <!-- Filled by ui/history-list.js renderTransactionList() -->
+  </ul>
+</section>

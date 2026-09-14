@@ -1,0 +1,37 @@
+/**
+ * mobile.css — iPhone-specific tweaks
+ * Safe areas, minimum tap targets (44px), dark mode, max width for phone layout.
+ */
+
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-main,
+.bottom-nav,
+.app-header {
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.bottom-nav {
+  max-width: 480px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.form__input,
+.btn {
+  min-height: 44px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #121816;
+    --color-surface: #1b2420;
+    --color-text: #edf2ef;
+    --color-text-muted: #9caaa3;
+    --color-border: #2d3a34;
+    --color-primary-soft: #163d31;
+  }
+}
