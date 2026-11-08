@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Portfolio Lab{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('home') }}">Portfolio Lab</a>
+    <p class="tagline">An educational calculator for portfolio risk.</p>
+  </header>
+  <p class="disclaimer">
+    Educational tool only. Figures use historical prices and a covariance estimate.
+    They are not a forecast and not financial advice. Nothing here is an instruction to buy or sell.
+  </p>
+  <main>
+    {% block main %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

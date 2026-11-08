@@ -1,0 +1,94 @@
+{
+  "US": {
+    "currency": "USD",
+    "currency_label": "US dollars",
+    "benchmark": {
+      "ticker": "SPX",
+      "name": "S&P 500"
+    },
+    "assets": [
+      {
+        "ticker": "AAPL",
+        "name": "Apple",
+        "kind": "stock",
+        "dividend_yield": 0.005
+      },
+      {
+        "ticker": "MSFT",
+        "name": "Microsoft",
+        "kind": "stock",
+        "dividend_yield": 0.008
+      },
+      {
+        "ticker": "JNJ",
+        "name": "Johnson & Johnson",
+        "kind": "stock",
+        "dividend_yield": 0.032
+      },
+      {
+        "ticker": "XOM",
+        "name": "Exxon Mobil",
+        "kind": "stock",
+        "dividend_yield": 0.034
+      },
+      {
+        "ticker": "SPY",
+        "name": "SPDR S&P 500 ETF",
+        "kind": "etf",
+        "dividend_yield": 0.013
+      },
+      {
+        "ticker": "BND",
+        "name": "Vanguard Total Bond Market ETF",
+        "kind": "etf",
+        "dividend_yield": 0.038
+      }
+    ]
+  },
+  "UK": {
+    "currency": "GBP",
+    "currency_label": "pounds",
+    "benchmark": {
+      "ticker": "FTSE",
+      "name": "FTSE 100"
+    },
+    "assets": [
+      {
+        "ticker": "SHEL.L",
+        "name": "Shell",
+        "kind": "stock",
+        "dividend_yield": 0.038
+      },
+      {
+        "ticker": "AZN.L",
+        "name": "AstraZeneca",
+        "kind": "stock",
+        "dividend_yield": null
+      },
+      {
+        "ticker": "HSBA.L",
+        "name": "HSBC",
+        "kind": "stock",
+        "dividend_yield": 0.055
+      },
+      {
+        "ticker": "ULVR.L",
+        "name": "Unilever",
+        "kind": "stock",
+        "dividend_yield": 0.032
+      },
+      {
+        "ticker": "ISF.L",
+        "name": "iShares Core FTSE 100 ETF",
+        "kind": "etf",
+        "dividend_yield": 0.035
+      },
+      {
+        "ticker": "IGLT.L",
+        "name": "iShares Core UK Gilts ETF",
+        "kind": "etf",
+        "dividend_yield": 0.03
+      }
+    ]
+  }
+}

@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}Workspace · Portfolio Lab{% endblock %}
+{% block main %}
+<div class="layout">
+  <section class="panel" aria-label="Portfolio inputs">
+    <label class="field">
+      <span>Name</span>
+      <input id="name" type="text" maxlength="80" value="New portfolio">
+    </label>
+    <div class="row">
+      <label class="field">
+        <span>Market</span>
+        <select id="market">
+          <option value="US">US · dollars · S&amp;P 500</option>
+          <option value="UK">UK · pounds · FTSE 100</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Window</span>
+        <select id="window">
+          <option value="1y">1 year</option>
+          <option value="3y" selected>3 years</option>
+          <option value="5y">5 years</option>
+          <option value="all">All available</option>
+        </select>
+      </label>
+    </div>
+    <div class="row">
+      <label class="field">
+        <span>Risk-free rate %</span>
+        <input id="rf" type="number" step="0.1" value="4">
+      </label>
+      <label class="field">
+        <span>Max weight %</span>
+        <input id="cap" type="number" min="1" max="100" step="1" value="40">
+      </label>
+    </div>
+    <fieldset class="cash-box">
+      <label class="check">
+        <input id="include-cash" type="checkbox" checked>
+        <span>Include a cash sleeve</span>
+      </label>
+      <div class="row">
+        <label class="field">
+          <span>Cash yield %</span>
+          <input id="cash-yield" type="number" step="0.1" value="4">
+        </label>
+        <label class="field">
+          <span>Lock cash weight %</span>
+          <input id="cash-weight" type="number" min="0" max="100" step="0.1" placeholder="Blank = unlocked">
+        </label>
+      </div>
+      <p class="hint">Leave the lock blank and Equal weight will share the portfolio with cash. Type a percent to hold cash steady. Cautious, Balanced, and Growth choose the cash weight themselves. Growth never puts more than 10% in cash. A blank lock is scored as 0% when you use Your weights.</p>
+    </fieldset>
+
+    <div class="section-head">
+      <h2>Holdings</h2>
+      <button type="button" class="ghost" id="lesson">Load the lesson mix</button>
+    </div>
+    <p class="hint" id="universe-note"></p>
+    <ul id="ticker-list" class="ticker-list"></ul>
+    <form id="live-form" class="live-row">
+      <label class="field grow">
+        <span>Add a live ticker</span>
+        <input id="live-symbol" type="text" placeholder="AAPL or SHEL.L" autocomplete="off">
+      </label>
+      <button type="submit" class="ghost">Fetch prices</button>
+    </form>
+    <p class="hint" id="live-note"></p>
+
+    <h2>Strategy</h2>
+    <div class="strategies" id="strategies">
+      <label><input type="radio" name="strategy" value="user" checked> Your weights</label>
+      <label><input type="radio" name="strategy" value="equal"> Equal weight</label>
+      <label><input type="radio" name="strategy" value="min_variance"> Cautious</label>
+      <label><input type="radio" name="strategy" value="max_sharpe"> Balanced</label>
+      <label><input type="radio" name="strategy" value="growth"> Growth</label>
+    </div>
+    <p class="hint" id="strategy-hint"></p>
+
+    <h2>Weights and expected returns</h2>
+    <p class="hint">Expected return starts as the historical average. Type a percent to override it. Overrides change Balanced and Growth only. They do not change the covariance matrix. Returns are price changes; dividend yield is separate.</p>
+    <div class="table-wrap">
+      <table class="data" id="weight-table">
+        <thead>
+          <tr>
+            <th>Holding</th>
+            <th>Weight %</th>
+            <th>Historical %</th>
+            <th>Override %</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="hint" id="weight-sum">Weights add up to 0.00%.</p>
+
+    <div class="actions">
+      <button type="button" class="primary" id="calculate">Calculate</button>
+      <button type="button" class="ghost" id="save">Save</button>
+      <button type="button" class="ghost danger" id="delete">Delete</button>
+    </div>
+    <p class="status" id="status" role="status"></p>
+  </section>
+
+  <section class="panel" id="results" aria-live="polite">
+    <h2>Result</h2>
+    <p class="error" id="error-banner" hidden></p>
+    <p class="hint" id="results-hint">Choose holdings and press Calculate. The weight vector, covariance matrix, and charts appear here.</p>
+    <div id="results-body" hidden>
+      <p class="warning" id="warning-banner" hidden></p>
+      <p class="note" id="window-note" hidden></p>
+      <div class="stat-grid" id="summary"></div>
+      <div class="captions" id="captions"></div>
+
+      <h3>The three steps</h3>
+      <p class="note" id="annualization-note"></p>
+      <div class="math-grid">
+        <div>
+          <h4>w, the weights</h4>
+          <div id="weight-vector" class="table-wrap"></div>
+        </div>
+        <div>
+          <h4>Σ w</h4>
+          <div id="sigma-w" class="table-wrap"></div>
+        </div>
+      </div>
+      <h4>Σ, annualised covariance</h4>
+      <div id="covariance" class="table-wrap"></div>
+      <p class="equation" id="equation"></p>
+      <p class="hint" id="variance-caption"></p>
+
+      <div class="chart-grid">
+        <figure>
+          <h3>Allocation</h3>
+          <div class="chart-box"><canvas id="allocation-chart"></canvas></div>
+          <figcaption id="allocation-caption"></figcaption>
+        </figure>
+        <figure>
+          <h3>Share of portfolio risk</h3>
+          <div class="chart-box"><canvas id="risk-chart"></canvas></div>
+          <figcaption id="risk-caption"></figcaption>
+        </figure>
+        <figure class="wide">
+          <h3>Cumulative price return, started at 1</h3>
+          <div class="chart-box tall"><canvas id="growth-chart"></canvas></div>
+          <figcaption>Each line is the growth of one unit of currency from price changes. Holdings are not plotted in raw prices, because a share at 400 and a share at 75 cannot share an axis honestly. The benchmark is the market you chose.</figcaption>
+        </figure>
+        <figure class="wide">
+          <h3>Drawdown of the constant-mix path</h3>
+          <div class="chart-box"><canvas id="drawdown-chart"></canvas></div>
+          <figcaption id="drawdown-caption"></figcaption>
+        </figure>
+        <figure class="wide">
+          <h3>Lowest volatility for each expected return</h3>
+          <div class="chart-box tall"><canvas id="frontier-chart"></canvas></div>
+          <figcaption id="frontier-caption"></figcaption>
+        </figure>
+      </div>
+
+      <h3>Correlation</h3>
+      <p class="hint">1 means the holdings moved together. 0 means no linear relationship. A blank cell means correlation is undefined because one holding has zero volatility.</p>
+      <div id="heatmap" class="table-wrap"></div>
+
+      <h3>Holding statistics</h3>
+      <p class="hint" id="dividend-note"></p>
+      <div class="table-wrap">
+        <table class="data" id="asset-table"></table>
+      </div>
+
+      <h3>Strategy comparison</h3>
+      <p class="hint">These are named mixes under the same cap. The page is not telling you which one to buy. Objective Sharpe uses expected returns, including any overrides. Historical Sharpe replays the window.</p>
+      <div class="table-wrap">
+        <table class="data" id="comparison-table"></table>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/workspace.js') }}"></script>
+<script>
+  PortfolioWorkspace.start("{{ portfolio_id }}");
+</script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Portfolio Lab{% endblock %}
+{% block main %}
+<section class="page-head">
+  <div>
+    <h1>Your portfolios</h1>
+    <p class="hint">Each portfolio is one currency, saved on this computer. Prices are not stored in the file, only your choices.</p>
+  </div>
+  <form method="post" action="{{ url_for('create_portfolio') }}">
+    <button type="submit" class="primary">New portfolio</button>
+  </form>
+</section>
+
+{% if portfolios %}
+<ul class="cards">
+  {% for portfolio in portfolios %}
+  <li class="card">
+    <a class="card-link" href="{{ url_for('workspace', portfolio_id=portfolio.id) }}">
+      <h2>{{ portfolio.name }}</h2>
+      <p>{{ portfolio.market }} · {{ portfolio.window }} · {{ portfolio.tickers | join(", ") if portfolio.tickers else "No holdings yet" }}</p>
+      <p class="meta">Updated {{ portfolio.updated_at[:10] }}</p>
+    </a>
+    <button type="button" class="ghost danger" data-delete="{{ portfolio.id }}">Delete</button>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty-state">No portfolios yet. Create one and load the lesson mix to see a covariance matrix.</p>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+document.querySelectorAll("[data-delete]").forEach((button) => {
+  button.addEventListener("click", async () => {
+    if (!confirm("Delete this portfolio?")) return;
+    const response = await fetch(`/api/portfolio/${button.dataset.delete}`, { method: "DELETE" });
+    if (response.ok) location.reload();
+  });
+});
+</script>
+{% endblock %}
